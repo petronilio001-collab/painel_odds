@@ -2,7 +2,7 @@ name: Monitorar Odds
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Executa a cada 1 hora
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -24,13 +24,15 @@ jobs:
         sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
 
     - name: Rodar monitor_odds.py
-      run: |
-        python3 monitor_odds.py
+      run: python3 monitor_odds.py
 
     - name: Rodar gerar_painel.py
-      run: |
-        python3 gerar_painel.py
+      run: python3 gerar_painel.py
 
-    - name: Salvar log
+    - name: Commit do index.html
       run: |
-        echo "Última execução: $(date)" >> painel_odds.log
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add index.html
+        git commit -m "Atualiza painel de odds"
+        git push
