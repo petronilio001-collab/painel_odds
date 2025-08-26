@@ -1,37 +1,33 @@
+import csv
+import time
+from datetime import datetime
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 
-from selenium.webdriver.chrome.service import Service
-
-chrome_options = Options()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.binary_location = "/usr/bin/chromium-browser"
-
-service = Service("/usr/bin/chromedriver")
-driver = webdriver.Chrome(service=service, options=chrome_options)
-
-
-# Configurações do navegador
-chrome_path = "./chromedriver"
-service = Service(chrome_path)
+# Configurações do navegador para GitHub Actions
 options = Options()
 options.add_argument("--headless")
-driver = webdriver.Chrome(service=service, options=options)
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+options.binary_location = "/usr/bin/chromium-browser"
 
-# Acessa a página de futebol da Oddspedia
+driver = webdriver.Chrome(options=options)
+
+# Acessa a página da Oddspedia
 url = "https://oddspedia.com/br/futebol"
 driver.get(url)
 time.sleep(5)
 
 # Coleta de dados
 dados_odds = []
-partidas = driver.find_elements(By.CSS_SELECTOR, "div.event-row, div.match-row")
+partidas = driver.find_elements(By.CSS_SELECTOR, "div.event-row")
 
 for partida in partidas:
     try:
-        times = partida.find_element(By.CSS_SELECTOR, ".event-name, .match-name, .teams").text
-        horario = partida.find_element(By.CSS_SELECTOR, ".event-time, .match-time, .time").text
-        mercados = partida.find_elements(By.CSS_SELECTOR, ".odds-value, .odd, .market-odds")
+        times = partida.find_element(By.CSS_SELECTOR, ".event-name").text
+        horario = partida.find_element(By.CSS_SELECTOR, ".event-time").text
+        mercados = partida.find_elements(By.CSS_SELECTOR, ".odds-value")
 
         if len(mercados) >= 2:
             odd_over = mercados[0].text.replace(",", ".")
@@ -59,4 +55,3 @@ with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
     writer.writerows(dados_odds)
 
 print(f"{len(dados_odds)} partidas registradas.")
-
