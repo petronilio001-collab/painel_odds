@@ -1,0 +1,36 @@
+name: Monitorar Odds
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Executa a cada 1 hora
+  workflow_dispatch:
+
+jobs:
+  monitorar:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do repositório
+      uses: actions/checkout@v3
+
+    - name: Instalar dependências
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y chromium-browser chromium-chromedriver
+        pip install selenium pandas
+
+    - name: Configurar ChromeDriver
+      run: |
+        sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+
+    - name: Rodar monitor_odds.py
+      run: |
+        python3 monitor_odds.py
+
+    - name: Rodar gerar_painel.py
+      run: |
+        python3 gerar_painel.py
+
+    - name: Salvar log
+      run: |
+        echo "Última execução: $(date)" >> painel_odds.log
