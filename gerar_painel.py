@@ -1,4 +1,3 @@
-
 import pandas as pd
 import os
 
@@ -26,77 +25,76 @@ for match, data in grouped:
     })
     color_index += 1
 
-html_content = f"""
-<!DOCTYPE html>
+html_content = f"""<!DOCTYPE html>
 <html>
 <head>
-    <title>Painel de Odds</title>
-    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<title>Painel de Odds</title>
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 </head>
 <body>
-    <h2>Tabela de Odds</h2>
-    <table border='1' cellpadding='5' cellspacing='0'>
-        <tr>
-            <th>Timestamp</th>
-            <th>Times</th>
-            <th>Horário</th>
-            <th>Odd Over 2.5</th>
-            <th>Odd Under 2.5</th>
-        </tr>
+<h2>Tabela de Odds</h2>
+<table border='1' cellpadding='5' cellspacing='0'>
+<tr>
+<th>Timestamp</th>
+<th>Times</th>
+<th>Horário</th>
+<th>Odd Over 2.5</th>
+<th>Odd Under 2.5</th>
+</tr>
 """
 
 for _, row in df.iterrows():
     html_content += f"""
-        <tr>
-            <td>{row['timestamp']}</td>
-            <td>{row['times']}</td>
-            <td>{row['horario']}</td>
-            <td>{row['odd_over']}</td>
-            <td>{row['odd_under']}</td>
-        </tr>
-    """
+<tr>
+<td>{row['timestamp']}</td>
+<td>{row['times']}</td>
+<td>{row['horario']}</td>
+<td>{row['odd_over']}</td>
+<td>{row['odd_under']}</td>
+</tr>
+"""
 
 html_content += f"""
-    </table>
-    <h2>Variação da Odd Over 2.5</h2>
-    <canvas id='oddsChart' width='1000' height='400'></canvas>
-    <script>
-        const ctx = document.getElementById('oddsChart').getContext('2d');
-        const chart = new Chart(ctx, {{
-            type: 'line',
-            data: {{
-                datasets: {str(datasets).replace("'", '"')}
-            }},
-            options: {{
-                scales: {{
-                    x: {{
-                        type: 'time',
-                        time: {{
-                            tooltipFormat: 'YYYY-MM-DD HH:mm:ss',
-                            displayFormats: {{
-                                hour: 'HH:mm'
-                            }}
-                        }},
-                        title: {{
-                            display: true,
-                            text: 'Timestamp'
-                        }}
-                    }},
-                    y: {{
-                        title: {{
-                            display: true,
-                            text: 'Odd Over 2.5'
-                        }}
+</table>
+<h2>Variação da Odd Over 2.5</h2>
+<canvas id='oddsChart' width='1000' height='400'></canvas>
+<script>
+const ctx = document.getElementById('oddsChart').getContext('2d');
+const chart = new Chart(ctx, {{
+    type: 'line',
+    data: {{
+        datasets: {str(datasets).replace("'", '"')}
+    }},
+    options: {{
+        scales: {{
+            x: {{
+                type: 'time',
+                time: {{
+                    tooltipFormat: 'YYYY-MM-DD HH:mm:ss',
+                    displayFormats: {{
+                        hour: 'HH:mm'
                     }}
+                }},
+                title: {{
+                    display: true,
+                    text: 'Timestamp'
+                }}
+            }},
+            y: {{
+                title: {{
+                    display: true,
+                    text: 'Odd Over 2.5'
                 }}
             }}
-        }});
-    </script>
+        }}
+    }}
+}});
+</script>
 </body>
 </html>
 """
 
-with open("painel_odds.html", "w", encoding="utf-8") as f:
+with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_content)
 
-print("Arquivo painel_odds.html gerado com sucesso.")
+print("Arquivo index.html gerado com sucesso.")
