@@ -1,0 +1,5 @@
+timestamp,times,horario,odd_over,odd_under
+2024-04-01 14:00:00,Time A vs Time B,14:00,2.1,1.7
+2024-04-01 14:05:00,Time A vs Time B,14:00,2.2,1.6
+2024-04-01 14:00:00,Time C vs Time D,15:00,1.9,1.8
+2024-04-01 14:05:00,Time C vs Time D,15:00,2.0,1.7
